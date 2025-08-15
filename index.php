@@ -1,0 +1,1088 @@
+<?php
+
+require 'php/conexion.php';
+
+session_start();
+
+// Inicializa la variables $noticias y $productos como un array vacío
+$noticias = [];
+
+$productos = [];
+
+try {
+    $db = new conectDB();
+
+    // Consulta las noticias y productos ordenadas por fecha de publicación
+    $noticias = $db->buscar('noticias', '1 ORDER BY fecha_publicacion DESC');
+
+    
+    $productos = $db->buscar('productos', 'estatus_publicacion = 1 ORDER BY id_producto DESC');
+    
+    // Si la consulta no devuelve datos, 
+    if (!$noticias) {
+        $noticias = [];
+    }
+
+    
+    if(!$productos){
+        $productos = [];
+    }
+
+} catch (Exception $e) {
+    
+    echo "Error al conectar con la base de datos: " . htmlspecialchars($e->getMessage());
+    $noticias = [];
+    $productos = [];
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activision | Home </title>
+
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-5.1.3-examples/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="imagenes/activision_logo_white-text.png" alt="" width="100" height="24"
+                        style="margin-top: 22px;" class="d-inline-block align-text-top">
+
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">INICIO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">ACERCA DE</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">PRODUCTOS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">NOTICIAS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">CONTACTO</a>
+                        </li>
+                        
+                    </ul>
+
+                     <!-- Enlace de administrador -->
+                     
+               <a href="login_admin.php" class="admin-button">  <i class="fas fa-user-shield">SOY ADMINISTRADOR</i> </a>
+
+                </div>
+            </div>
+        </nav>
+
+       
+
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <video autoplay muted loop height="500" width="100%"
+                        src="Videos/Call of Duty_ Warzone & Modern Warfare 3 - Official The Haunting - Season 6 Launch Trailer.mp4"></video>
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1><img src="imagenes/call_of_duty_modern_warfare_logo.png" width="" height="200px"></h1>
+                            <p>
+                                Obligados a revelarse, perseguidos desde adentro.
+
+                            </p>
+                            <p>
+                                <button class="btn btn-primary rounded-pill">COMPRAR JUEGO</button>
+                                <button class="btn btn-outline-light rounded-pill">VER MÁS</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <video autoplay muted loop height="500" width="100%"
+                        src="Videos/Crash Bandicoot 4 - N. Gin Boss Battle.mp4"></video>
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1><img src="imagenes/crash-bandicoot-logo.png" width="" height="200"></h1>
+                            <p>
+                                Una gran aventura te espera.
+
+                            </p>
+                            <p><button class="btn btn-primary rounded-pill">COMPRAR JUEGO</button>
+                                <button class="btn btn-outline-light rounded-pill">VER MÁS</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </header>
+
+
+
+
+
+    <!-- Sección 3: Presentación del sitio -->
+    <!-- Sección 4: Productos -->
+
+
+    <section class="activision-blogs">
+
+        <div class="inner-container">
+
+            <h2><span>ÚLTIMAS NOTICIAS Y ARTÍCULOS</span></h2>
+
+
+
+            <div class="blog-tabs-wrapper-mobile">
+                <div class="blog-tab.underline"
+                    style=" left: 154px; max-width: 137px; visibility: visible; opacity: 1;"></div>
+                <!-- <div class="selected-logo"><p>All News</p></div> -->
+                <hr>
+                <ul class="blog-tabs-list-mobile">
+                    <li class="blog-tabs-item mobile" id="tab-1" data-value="all news"
+                        onclick="toggleContent('content-all-news')">
+                        <p>All News</p>
+                    </li>
+                    <li class="blog-tabs-item mobile" id="tab-2" data-value="activision"
+                        onclick="toggleContent('content-activision')"><img src="imagenes/activision-logo-small.svg"
+                            alt="Activision"></li>
+                    <li class="blog-tabs-item mobile" id="tab-3" data-value="call-of-duty"
+                        onclick="toggleContent('content-call-of-duty')"><img src="imagenes/cod-logo.svg"
+                            alt="Call of Duty"></li>
+                    <li class="blog-tabs-item mobile" id="tab-4" data-value="tony-hawk"
+                        onclick="toggleContent('content-tony-hawk')"><img src="imagenes/thps-logo.png"
+                            alt="Tony Hawks&#39;s Pro Skater 1 + 2"></li>
+                    <li class="blog-tabs-item mobile" id="tab-5" data-value="crash-bandicoot"
+                        onclick="toggleContent('content-crash-bandicoot')"><img src="imagenes/crash-bandicoot-logo.png"
+                            alt="Crash Bandicoot 4 It&#39;s about time"></li>
+                </ul>
+                <hr>
+
+                <br>
+            </div>
+
+
+            <!-- CONTIENE NOTICIAS Y CONTENIDO DE PRODUCTOS POPULARES   -->
+
+            <div id="content-all-news" class="blog-tabs" data-tab="all">
+
+            <?php if ($noticias): ?>
+        <?php 
+        $max_noticias = 6; // Número máximo de noticias a mostrar
+        $contador = 0; // Inicializar contador
+        ?>
+        <?php foreach ($noticias as $noticia): ?>
+            <?php if ($contador >= $max_noticias) break; // Salir del bucle si se alcanzó el límite ?>
+            <div class="blog-tile all blog-normal" data-game="all" style="display: block;">
+                <a href="detalle_noticia.php?id=<?php echo $noticia['id_noticia']; ?>" class="blog-link"></a>
+                <div class="blog-img-container">
+                    <div class="blog-img" style="background-image: url(<?php echo htmlspecialchars($noticia['imagen_publicacion']); ?>);"></div>
+                </div>
+                <div class="blog-txt-container">
+                    <!-- Formatea la fecha correctamente -->
+                    <?php
+                    $fecha_formateada = date("M d, Y", strtotime($noticia['fecha_publicacion']));
+                    ?>
+                    <div class="blog-timestamp"><?php echo htmlspecialchars($fecha_formateada); ?></div>
+                    <div class="blog-headline"><?php echo htmlspecialchars($noticia['titulo']); ?></div>
+                    <div class="blog-divider-wrapper">
+                        <div class="blog-divider"></div>
+                    </div>
+                    <div class="blog-copy-wrapper">
+                        <div class="blog-copy"><?php echo htmlspecialchars($noticia['contenido']); ?></div>
+                    </div>
+                    <a href="detalle_noticia.php?id=<?php echo $noticia['id_noticia']; ?>" class="blog-more-wrapper">
+                        <div class="blog-more">LEER MÁS</div>
+                    </a>
+                </div>
+            </div>
+            <?php $contador++; // Incrementar el contador ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No hay noticias disponibles.</p>
+    <?php endif; ?>
+
+
+
+
+                
+            </div>
+
+
+
+
+            <div id="content-activision" class="blog-tabs" data-tab="all">
+                <!-- ACTIVISION-->
+
+                <!-- modificado por equivocación de productos -->
+
+            </div>
+
+
+            <div id="content-call-of-duty" class="blog-tabs" data-tab="all">
+
+                <!-- CALL OF DUTY-->
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/activision/2024/activision-releases-call-of-duty-warzone-caldera-data-set"
+                        class="blog-link"
+                        aria-label="Read more:  OpenUSD Caldera Data Set is available for download for academic and non-commercial use"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/caldera.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Jul 30, 2024</div>
+                        <div class="blog-headline"> OpenUSD Caldera Data Set is available for download for academic and
+                            non-commercial use</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Access Call of Duty: Warzone Caldera OpenUSD Data Set </div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/activision/2024/activision-releases-call-of-duty-warzone-caldera-data-set">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-road-to-launch-preload-new-ui-intel"
+                        class="blog-link"
+                        aria-label="Read more: El camino hacia el lanzamiento de <em>Black Ops 6</em>"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/noticias1.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 17, 2024</div>
+                        <div class="blog-headline">El camino hacia el lanzamiento de &lt;em&gt;Black Ops 6&lt;/em&gt;
+                        </div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">El lunes, una actualización introducirá la nueva interfaz de <em>Call
+                                    of Duty</em> y precargará <em>Call of Duty: Black Ops 6</em> en tu dispositivo.
+                                Descarga esta actualización previa al lanzamiento para ver la nueva interfaz y tenerlo
+                                todo preparado para jugar a <em>Black Ops 6 </em>tan pronto como esté disponible.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-road-to-launch-preload-new-ui-intel">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-launch-comms-multiplayer-modes-maps-operators-intel"
+                        class="blog-link"
+                        aria-label="Read more: <em>Black Ops 6</em>: modos multijugador, mapas y más"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/noticia2.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 16, 2024</div>
+                        <div class="blog-headline">&lt;em&gt;Black Ops 6&lt;/em&gt;: modos multijugador, mapas y más
+                        </div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Prepárate para el multijugador de <em>Black Ops 6</em> con
+                                información no censurada sobre cada modo de lanzamiento, una muestra de los 16 mapas de
+                                lanzamiento y una presentación de todos los operadores de las facciones Rogue Black Ops
+                                y Crimson One.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-launch-comms-multiplayer-modes-maps-operators-intel">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-pc-trailer-specs-preloading-intel"
+                        class="blog-link"
+                        aria-label="Read more: Tráiler, requisitos y más de <em>Black Ops 6</em> para PC"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/noticias3.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 15, 2024</div>
+                        <div class="blog-headline">Tráiler, requisitos y más de &lt;em&gt;Black Ops 6&lt;/em&gt; para PC
+                        </div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Prepárate para el lanzamiento de <em>Black Ops 6</em> en PC el 25 de
+                                octubre con detalles sobre la integración de AMD en el juego, tiempos de precarga,
+                                tamaños de archivo y especificaciones mínimas, recomendadas, competitivas/ultra 4K y
+                                más.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-pc-trailer-specs-preloading-intel">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-dynamic-soundscape-audio-intel"
+                        class="blog-link" aria-label="Read more: Innovaciones de sonido de <em>Black Ops 6</em>"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/noticias4.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 14, 2024</div>
+                        <div class="blog-headline">Innovaciones de sonido de &lt;em&gt;Black Ops 6&lt;/em&gt;</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Desde avances en la reverberación espacial hasta un nuevo sistema de
+                                prioridad que destaca los sonidos más importantes para la supervivencia de tu operador y
+                                mucho más, creemos que <em>Black Ops 6</em> ofrecerá uno de los paisajes sonoros
+                                técnicamente más impresionantes hasta la fecha. </div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-dynamic-soundscape-audio-intel">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-anti-toxicity-progress-report-black-ops-6-moderation-results"
+                        class="blog-link"
+                        aria-label="Read more: Resultados de los sistemas de moderación de texto y voz del juego; moderación de <em>Black Ops 6</em> desde el primer día"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/noticias5.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 10, 2024</div>
+                        <div class="blog-headline">Resultados de los sistemas de moderación de texto y voz del juego;
+                            moderación de &lt;em&gt;Black Ops 6&lt;/em&gt; desde el primer día</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Informe antitoxicidad: resultados de <em>Modern Warfare III</em> y el
+                                lanzamiento de <em>Black Ops 6</em></div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-anti-toxicity-progress-report-black-ops-6-moderation-results">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div class="blog-tile call-of-duty" data-game="call-of-duty" style="display: none;">
+                    <a target="_blank"
+                        href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-campaign-part-2-character-bio-intel"
+                        class="blog-link"
+                        aria-label="Read more: Campaña de <em>Black Ops 6</em>: la historia hasta ahora, parte 2"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img"
+                            style="background-image: url(/content/dam/atvi/callofduty/cod-touchui/blog/hero/bo6/BO6-CAMPAIGN-TOUT-PART2.jpg)">
+                        </div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Oct 09, 2024</div>
+                        <div class="blog-headline">Campaña de &lt;em&gt;Black Ops 6&lt;/em&gt;: la historia hasta ahora,
+                            parte 2</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">No confíes en nadie. Realiza tu propio informe con un vistazo más de
+                                cerca a la narrativa de la campaña de <em>Black Ops 6</em> y a las biografías de algunos
+                                nuevos personajes de la serie. Además, obtén consejos para empezar la campaña y un
+                                avance de las recompensas que obtendrás por completar misiones y desafíos. </div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://www.callofduty.com/es/blog/2024/10/call-of-duty-black-ops-6-campaign-part-2-character-bio-intel">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div id="content-tony-hawk" class="blog-tabs" data-tab="all">
+                <!-- TONY HAWKS-->
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2022-03/tony-hawks-pro-skater-scratch-board-limited-edition-sweepstakes"
+                        class="blog-link"
+                        aria-label="Read more: Chance to win a Scratch Board and More Via Tony Hawk’s™ Pro Skater™ Sweepstakes"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH1.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Mar 14, 2022</div>
+                        <div class="blog-headline">Chance to win a Scratch Board and More Via Tony Hawk’s™ Pro Skater™
+                            Sweepstakes</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">The more you skate, the more it reveals. Participate for the chance
+                                to win your own Scratch Board that reveals hidden prizes as you skate. Read on for entry
+                                details and more.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2022-03/tony-hawks-pro-skater-scratch-board-limited-edition-sweepstakes">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2021-02/Tony-Hawks-Pro-Skater-1-2-Platforms-Announcement"
+                        class="blog-link"
+                        aria-label="Read more: Tony Hawk’s™ Pro Skater™ 1 + 2 – Coming Soon to New Platforms!"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH2.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Feb 23, 2021</div>
+                        <div class="blog-headline">Tony Hawk’s™ Pro Skater™ 1 + 2 – Coming Soon to New Platforms!</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Be the G.O.A.T. and get shredding in true next-gen fashion and
+                                on-the-go.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2021-02/Tony-Hawks-Pro-Skater-1-2-Platforms-Announcement">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2020-11/Contribute-to-The-Skatepark-Project"
+                        class="blog-link" aria-label="Read more: Contribute to The Skatepark Project"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH3.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Nov 06, 2020</div>
+                        <div class="blog-headline">Contribute to The Skatepark Project</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Get 10 boards for your Create-a-Skater all while helping to create
+                                skateparks for underprivileged youth communities in the U.S.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2020-11/Contribute-to-The-Skatepark-Project">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2020-11/Tony-Hawks-Pro-Skater-1-and-2-November-Update"
+                        class="blog-link"
+                        aria-label="Read more: Solo Tours, New Decks and Create-a-Skater Crash Swag!"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH4.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Nov 05, 2020</div>
+                        <div class="blog-headline">Solo Tours, New Decks and Create-a-Skater Crash Swag!</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">From the ability to replay Tours with individual skaters to
+                                Crash-themed gear for your Create-a-Skater, not to mention a ten-deck bundle that
+                                benefits The Skate-park Project, this is all you need to know about the game’s next
+                                update.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2020-11/Tony-Hawks-Pro-Skater-1-and-2-November-Update">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2020-09/Tony-Hawks-Pro-Skater-1-and-2-Available-Now"
+                        class="blog-link"
+                        aria-label="Read more: Tony Hawk's™ Pro Skater™ 1&nbsp;+&nbsp;2 ya disponible"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH5.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Sep 04, 2020</div>
+                        <div class="blog-headline">Tony Hawk's™ Pro Skater™ 1&nbsp;+&nbsp;2 ya disponible</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Prepárate para conocer todos los detalles de esta remasterización
+                                fiel de los dos primeros juegos de THPS de la mano de Vicarious Visions, entre los que
+                                se incluye la celebración que montó Tony Hawk el día del lanzamiento o dónde comprar el
+                                siguiente capítulo en la historia de la franquicia.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2020-09/Tony-Hawks-Pro-Skater-1-and-2-Available-Now">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-tony-hawk" class="blog-tile tony-hawk" data-game="tony-hawk" style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/tony-hawk/2020-08/THPS-Demo-Everything-You-Need-to-Know"
+                        class="blog-link" aria-label="Read more: Warehouse Demo: Everything You Need to Know"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/TH6.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Aug 12, 2020</div>
+                        <div class="blog-headline">Warehouse Demo: Everything You Need to Know</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Ready to drop into the demo? Read this in-depth primer first for
+                                download instructions and details about this experience, accessible via digital
+                                pre-order starting this Friday!</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/tony-hawk/2020-08/THPS-Demo-Everything-You-Need-to-Know">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div id="content-crash-bandicoot" class="blog-tabs" data-tab="all">
+                <!-- CRASH BANDICOOT-->
+
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-season-3-spyro-elora-announcement"
+                        class="blog-link"
+                        aria-label="Read more: Get all fired up for the winter season with new heroes, maps, and more."></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH1.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Dec 07, 2023</div>
+                        <div class="blog-headline">Get all fired up for the winter season with new heroes, maps, and
+                            more.</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy"></div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-season-3-spyro-elora-announcement">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-season-2-available-now"
+                        class="blog-link" aria-label="Read more: Get a sneak peek at what’s to come in Season 2"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH2.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Sep 12, 2023</div>
+                        <div class="blog-headline">Get a sneak peek at what’s to come in Season 2</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy"></div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-season-2-available-now">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-free-limited-time-access-trial"
+                        class="blog-link" aria-label="Read more: Crash Team Rumble is Free for a Limited Time"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH3.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Aug 09, 2023</div>
+                        <div class="blog-headline">Crash Team Rumble is Free for a Limited Time</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">The team at Toys for Bob is excited for players everywhere to have a
+                                chance to jump into the fun from August 11 – August 14! </div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2023/crash-team-rumble-free-limited-time-access-trial">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2023/crash-bandicoot-team-rumble-launch-playstation-xbox-wumpa-fruit"
+                        class="blog-link"
+                        aria-label="Read more: El N.&nbsp;Creíble Crash&nbsp;Team&nbsp;Rumble ya está disponible"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH4.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Jun 20, 2023</div>
+                        <div class="blog-headline">El N.&nbsp;Creíble Crash&nbsp;Team&nbsp;Rumble ya está disponible
+                        </div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Disfruta de una experiencia nueva de Crash Bandicoot con
+                                Crash&nbsp;Team&nbsp;Rumble, un juego multiplataforma 4&nbsp;contra&nbsp;4. Avanza a
+                                base de saltos, deslizamientos, aplastamientos y porrazos por 9&nbsp;escenarios
+                                alucinantes con 8&nbsp;personajes únicos en busca de las deliciosas frutas wumpa. ¡Crash
+                                Bandicoot como nunca antes!</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2023/crash-bandicoot-team-rumble-launch-playstation-xbox-wumpa-fruit">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2023/crash-bandicoot-team-rumble-online-standard-deluxe-editions-battle-pass"
+                        class="blog-link"
+                        aria-label="Read more: Get Ready for an N. Sane Rumble: Pre-Order Crash Team Rumble Online and at Select Retailers!"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH5.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Mar 30, 2023</div>
+                        <div class="blog-headline">Get Ready for an N. Sane Rumble: Pre-Order Crash Team Rumble Online
+                            and at Select Retailers!</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">While we eagerly await players to participate in the Closed Beta* on
+                                April 20-24, we thought we’d share more details on what to expect in the coming weeks.
+                            </div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2023/crash-bandicoot-team-rumble-online-standard-deluxe-editions-battle-pass">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+                <div id="content-crash-bandicoot" class="blog-tile crash-bandicoot" data-game="crash-bandicoot"
+                    style="display: none;">
+                    <a target="_blank"
+                        href="https://blog.activision.com/es/crash-bandicoot/2022/crash-bandicoot-team-rumble-competitive-multiplayer-coming-soon"
+                        class="blog-link"
+                        aria-label="Read more: Crash Team Rumble™  — Coming Soon to Xbox and PlayStation"></a>
+                    <div class="blog-img-container">
+                        <div class="blog-img" style="background-image: url(imagenes/CRASH4.jpg)"></div>
+                    </div>
+                    <div class="blog-txt-container">
+                        <div class="blog-timestamp">Dec 09, 2022</div>
+                        <div class="blog-headline">Crash Team Rumble™ — Coming Soon to Xbox and PlayStation</div>
+                        <div class="blog-divider-wrapper">
+                            <div class="blog-divider"></div>
+                        </div>
+                        <div class="blog-copy-wrapper">
+                            <div class="blog-copy">Rise as a hero or unleash your inner villain as Crash, Dingodile, and
+                                other heroes and villains of the Crash universe head to the arena in the all-new,
+                                team-based, 4v4, cross-platform Crash Team Rumble™, releasing in 2023.</div>
+                        </div>
+                        <a target="_blank" class="blog-more-wrapper"
+                            href="https://blog.activision.com/es/crash-bandicoot/2022/crash-bandicoot-team-rumble-competitive-multiplayer-coming-soon">
+                            <div class="blog-more">LEER MÁS</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+        <!-- BOTON "VER TODO"-->
+
+        <div class="blog-view-more" style="margin-left: 42%;">
+            <a class="blog-btn blog-btn-secondary atvi-cta-item" target="_blank" id="view-all"
+                href="https://blog.activision.com/es">VER TODO </a>
+        </div>
+
+
+
+        <br>
+        <br>
+
+        <h2><span>PRODUCTOS</span></h2>
+        <div id="content-all-news" class="blog-tabs" data-tab="all">
+
+
+        <?php if ($productos): ?>
+        <?php 
+        $max_productos = 6; // Número máximo de productos a mostrar
+        $contador = 0; // Inicializar contador
+        ?>
+        <?php foreach ($productos as $producto): ?>
+            <?php if ($contador >= $max_productos) break; // Salir del bucle si se alcanzó el límite ?>
+            <div class="blog-tile all blog-normal" data-game="all" style="display: block;">
+                <a href="detalle_producto.php?id=<?php echo $producto['id_producto']; ?>" class="blog-link"></a>
+                <div class="blog-img-container">
+                    <div class="blog-img" style="background-image: url(<?php echo htmlspecialchars($producto['imagen_producto']); ?>);"></div>
+                </div>
+                <div class="blog-txt-container">
+                    <div class="blog-headline"><?php echo htmlspecialchars($producto['nombre_producto']); ?></div>
+                    <div class="blog-divider-wrapper">
+                        <div class="blog-divider"></div>
+                    </div>
+                    <div class="blog-copy-wrapper">
+                        <div class="blog-copy"><?php echo htmlspecialchars($producto['descripcion']); ?>
+                            <ul>
+                                <li>Incluye características exclusivas</li>
+                                <li>Acceso anticipado</li>
+                                <li>Soporte extendido</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="detalle_producto.php?id=<?php echo $producto['id_producto']; ?>" class="blog-more-wrapper">
+                        <div class="blog-more">
+                            <button class="btn btn-warning rounded-pill">
+                                $<?php echo htmlspecialchars(number_format($producto['precio'], 2)); ?>
+                            </button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <?php $contador++; // Incrementar el contador ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No hay productos disponibles.</p>
+    <?php endif; ?>
+</div>
+
+        </div>
+
+        <br>
+        <hr/>
+        <br>
+        <br>
+
+        <div id="content-all-news" class="blog-tabs" data-tab="all">
+            <div>
+                <div class="mb-3">
+                    <h4>CONTACTANOS</h4>
+
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Nombre completo:</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Nombre Apellido">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Direccion de correo:</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Tu mensaje:</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1"placeholder="Tu mensaje aqui..." rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-outline-light rounded-pill">ENVIAR</button>
+                </div>
+                
+            </div>
+            <div>
+               
+                <div class="mb-3">
+                    
+
+                </div>
+                <div class="mb-3">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15034244.973135818!2d-128.17372724999996!3d23.07988590000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86af5a8b9adb1c09%3A0x502119155472a638!2sITES%20LOS%20CABOS%20Instituto%20Tecnol%C3%B3gico!5e0!3m2!1ses-419!2smx!4v1730428506580!5m2!1ses-419!2smx" width="600" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+
+
+            </div>
+            
+            
+        </div>
+        </div>
+        <br>
+
+        <hr/>
+        <br>
+        <br>
+
+
+        <!-- parte contactanos-->
+
+
+        <section class="employment-section">
+            <div class="left-column">
+                <h1>DIVIÉRTETE</h1>
+                <p>Más Información Sobre Las Oportunidades De Empleo</p>
+                <button class="join-button">ÚNETE A NOSOTROS</button>
+            </div>
+            <div class="right-column">
+                <h2>NUESTROS EQUIPOS</h2>
+                <ul>
+                    <li>DISEÑO DE JUEGO</li>
+                    <li>GRÁFICOS Y ANIMACIÓN</li>
+                    <li>GESTIÓN DE MARCA</li>
+                    <li>PRODUCCIÓN</li>
+                    <li>CONTROL DE CALIDAD</li>
+                    <li>ASISTENCIA AL CLIENTE</li>
+                    <li>OPERACIONES DEL ESTUDIO</li>
+                    <li>PROGRAMACIÓN</li>
+                    <li>FINANZAS Y CONTABILIDAD</li>
+                    <li>RECURSOS HUMANOS</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <br>
+        <br>
+
+        <!-- PIE DE PÁGINA-->
+
+
+        <footer class="footer">
+            <div class="footer-top">
+                <div class="footer-section">
+                    <h4>SÍGUENOS</h4>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/Activision"><img src="imagenes/facebook.png"
+                                alt="Facebook"></a>
+                        <a href="https://x.com/activision"><img src="imagenes/twitter-active.png" alt="Twitter"></a>
+                        <a href="https://www.youtube.com/user/ActivisionGames?sub_confirmation=1"><img
+                                src="imagenes/youtube-active.png" alt="YouTube"></a>
+                        <a href="https://www.linkedin.com/company/activision"><img src="imagenes/linkedin.png"
+                                alt="LinkedIn"></a>
+                        <a href="https://www.instagram.com/activision"><img src="imagenes/instagramm-active.png"
+                                alt="Instagram"></a>
+                    </div>
+                    <div class="ratings">
+                        <img src="imagenes/PEGI.png" alt="PEGI">
+                        <img src="imagenes/esrb.png" alt="ESRB">
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>JUEGOS POPULARES</h4>
+                    <ul>
+                        <li><a href="https://www.callofduty.com/es">Call of Duty</a></li>
+                        <li><a href="https://www.tonyhawkthegame.com/es">Tony Hawk Pro Skater</a></li>
+                        <li><a href="https://www.crashbandicoot.com/es">Crash Bandicoot</a></li>
+                        <li><a href="https://www.spyrothedragon.com/es">Spyro</a></li>
+                        <li><a href="https://www.sekirothegame.com/es">Sekiro</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>EMPRESA</h4>
+                    <ul>
+                        <li><a href="https://press.activision.com/es/home">Press</a></li>
+                        <li><a href="https://research.activision.com">Investigación</a></li>
+                        <li><a href="https://www.activisionblizzard.com">Activision Blizzard</a></li>
+                        <li><a href="https://support.activision.com/es/options">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>INFORMACIÓN LEGAL</h4>
+                    <ul>
+                        <li><a href="https://www.activision.com/legal/terms-of-use">Términos De Uso</a></li>
+                        <li><a href="https://www.activision.com/legal/privacy-policy">Política de privacidad</a></li>
+                        <li><a href="https://www.activision.com/legal/cookie-policy">Política de cookies</a></li>
+                        <li><a href="#">Ajustes de cookies</a></li>
+                        <li><a href="https://www.activision.com/legal/online-safety-guide">Seguridad en Internet</a>
+                        </li>
+                        <li><a href="https://www.activision.com/legal/applicant-privacy-policy">Política de privacidad:
+                                solicitante</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <img src="imagenes/activision-logo.svg" alt="Activision">
+                    <p>Copyright 2024 Activision Publishing, Inc.</p>
+                </div>
+                <div class="footer-lines">
+                    <!-- lineas de colores -->
+                </div>
+            </div>
+        </footer>
+
+
+
+    </section>
+
+
+
+    </div>
+
+
+
+
+
+    <!-- FUNCIONALIDAD PARA SELECCIÓN " aún pediente " -->
+    <script>
+
+    </script>
+
+
+    <script src="bootstrap-5.1.3-examples/js/bootstrap.bundle.min.js"></script>
+    <div style="display: none; visibility: hidden;">
+        <script src="./Activision _ Home_files/otSDKStub.js.descarga" data-document-language="true"
+            type="text/javascript" charset="UTF-8" data-domain-script="141f25bc-f61b-4eed-aa0e-70a799c6e9ed"></script>
+        <script
+            type="text/javascript">function OptanonWrapper() { window.dataLayer.push({ event: "OneTrustGroupsUpdated" }) };</script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
+</body>
+
+</html>
